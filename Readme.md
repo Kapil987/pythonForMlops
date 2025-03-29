@@ -71,6 +71,7 @@ To add additional files or folders to your repository, follow these steps:
    Example:
    ```bash
    git add "./1- Python Basics/"
+   git add '.\1-Python_Basics\' 
    ```
 
 2. Commit the changes:
