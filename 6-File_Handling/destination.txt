@@ -1,0 +1,7 @@
+Hello world
+This is a new line 
+we are learning file operations today
+Append operation taking place!
+First line 
+Second line 
+Third line
