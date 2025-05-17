@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <!-- with or without css sheet -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"> -->
+</head>
+<body>
+    <h1>Submit a Form</h1>
+    <form action="/submit" method="post">
+    <!-- <form action="/index" method="post"> -->
+
+        <!-- The below is for text box -->
+        <label for="name">Name:</label>
+        <!-- name="name1 this connects for form.request -->
+        <input type="text" id="name" name="name1">
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
