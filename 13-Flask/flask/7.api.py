@@ -1,6 +1,6 @@
 ### Put and Delete-HTTP Verbs
 ### Working With API's--Json
-## Create a TO-DO list
+## Create a TO-DO list in json
 
 from flask import Flask, jsonify, request
 
@@ -24,9 +24,9 @@ def get_items():
 
 ## get: Retireve a specific item by Id
 @app.route('/items/<int:item_id>', methods=['GET'])
-def get_item(item_id):
+def get_item(item_id): # 1
     for item in items:
-        if item["id"] == item_id:
+        if item["id"] == item_id: # 1 or as 2 or else
             return jsonify(item)
     return jsonify({"error": "item not found"})
 

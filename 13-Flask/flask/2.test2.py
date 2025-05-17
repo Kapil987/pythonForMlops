@@ -23,7 +23,7 @@ app = Flask(__name__)
 # @app.route("/", methods=["POST"]) # ERROR in browser check this in postman
 def hello():
     # Function that returns "Hello, World!" when the home page is accessed
-    # return "<h1>Hello, World!<h1>"
+    # return "<h1>Hello, World! 23<h1>"
     # return "Hello, World! any messaage"
     return render_template("index.html")
 

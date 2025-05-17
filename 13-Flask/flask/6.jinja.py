@@ -32,19 +32,20 @@ def about():
 
 
 ## Variable Rule
-@app.route('/success/<score>')
+@app.route('/success/<score>') # 33 + 33 = 3333 , 33 + 33 = 66 , int(abc) > 50
 def success(score):
     print("score type",type(score))
     res=""
     
-    # if score>=50:
-    #     res="PASSED"
-    # else:
-    #     res="FAILED"
+    if int(score)>=50:
+        res="PASSED"
+    else:
+        res="FAILED"
 
     # return ("the score input was: ",score) # this does not work in html, the score will not get printed
-    return ("the score input was: "+ score)
-    # return render_template('result.html',results=res)
+    # return ("the score input was: "+ score)
+    # return ("the score input was: "+ res)
+    return render_template('result.html',results=res)
 
 #############
 @app.route('/num/<int:myscore>') # Give an int value here
@@ -62,7 +63,7 @@ def num(myscore):
     return render_template('result.html',results=res)
 
 ## Variable Rule
-@app.route('/successres/<int:score>')
+@app.route('/successres/<int:score>') # successres , score
 def successres(score):
     res=""
     if score>=50:
@@ -84,19 +85,19 @@ def successres(score):
 # def fail(score):
 #     return render_template('result.html',results=score)
 
-@app.route('/submit',methods=['POST','GET'])
+@app.route('/submit',methods=['POST','GET']) # http://localhost:5000/submit
 def submit():
     total_score=0
-    if request.method=='POST':
-        science=float(request.form['science'])
-        maths=float(request.form['maths'])
-        c=float(request.form['c'])
+    if request.method=='POST': # if its a GET request then it will be false
+        science     =float(request.form['science'])
+        maths       =float(request.form['maths'])
+        c           =float(request.form['c'])
         data_science=float(request.form['datascience'])
 
         total_score=(science+maths+c+data_science)/4
     else:
         return render_template('getresult.html')
-    return redirect(url_for('successres',score=total_score))
+    return redirect(url_for('successres',score=total_score)) # got to successres , score
 
 if __name__=="__main__":
     app.run(debug=True)
