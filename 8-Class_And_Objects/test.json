@@ -1,0 +1,17 @@
+events { 'Records': [
+  {'eventVersion': '2.1', 'eventSource': 'aws:s3', 'awsRegion': 'us-east-1', 
+  'eventTime': '2025-04-23T14:24:27.760Z', 'eventName': 'ObjectCreated:Put', 'userIdentity': 
+  {'principalId': 'AKVRDOK5L0FSG'}, 'requestParameters': 
+  {'sourceIPAddress': '202.54.252.200'}, 'responseElements': 
+  {'x-amz-request-id': '9YG4PDTB04116RNE', 'x-amz-id-2': 
+  'J+DiwXep/NrFMXNOE/kMMqCB5Z8OFnHDK0X+P6IVskbH5PfOch96l+upnw8ZdnNA1fCiZqLzR7XA8HgbuJ3YpujjJUBjFKMRPIc2SAr8aj0='}, 
+  's3': {'
+    s3SchemaVersion': '1.0', 'configurationId': 'demo1', 'bucket': 
+    {'name': 'ai-poc-987', 'ownerIdentity': {'principalId': 'AKVRDOK5L0FSG'}, 
+    'arn': 'arn:aws:s3:::ai-poc-987'}, 'object': {'key': 'redmismall.csv', 'size': 571, 'eTag': 'd8558e611f7860d51bf1b8b577664779', 
+    'sequencer': '006808F81BB2BFC8E6'
+    }
+  }
+  }
+  ]
+}

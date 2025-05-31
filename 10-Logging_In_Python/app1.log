@@ -1,0 +1,17 @@
+
+2025-05-04 21:35:13 - ArithmethicApp - INFO - Starting the application
+2025-05-04 21:35:13 - ArithmethicApp - DEBUG - Adding 10 + 15= 25
+2025-05-04 21:35:13 - ArithmethicApp - DEBUG - Subtracting 15 - 10 = 5
+2025-05-04 21:35:13 - ArithmethicApp - DEBUG - Multiplying 10 * 20 = 200
+2025-05-04 21:35:13 - ArithmethicApp - ERROR - Division by zero error
+2025-05-04 21:35:24 - ArithmethicApp - INFO - Starting the application
+2025-05-04 21:35:24 - ArithmethicApp - DEBUG - Adding 10 + 15= 25
+2025-05-04 21:35:24 - ArithmethicApp - DEBUG - Subtracting 15 - 10 = 5
+2025-05-04 21:35:24 - ArithmethicApp - DEBUG - Multiplying 10 * 20 = 200
+2025-05-04 21:35:24 - ArithmethicApp - ERROR - Division by zero error
+
+2025-05-04 21:43:16 - ArithmethicApp - INFO - Starting the application
+2025-05-04 21:43:16 - ArithmethicApp - DEBUG - Adding 10 + 15= 25
+2025-05-04 21:43:16 - ArithmethicApp - DEBUG - Subtracting 15 - 10 = 5
+2025-05-04 21:43:16 - ArithmethicApp - DEBUG - Multiplying 10 * 20 = 200
+2025-05-04 21:43:16 - ArithmethicApp - DEBUG - Dividing 20 / 10 = 2.0
