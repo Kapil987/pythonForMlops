@@ -1,0 +1,46 @@
+# docker-compose.yml
+# Defines services, networks, and volumes for a multi-container Docker application.
+
+version: '3.8' # Specify the Docker Compose file format version
+
+services:
+  # Service for the Flask web application
+  web:
+    build: . # Build the Docker image for this service from the current directory (where Dockerfile is located)
+    # Map port 5000 of the host machine to port 5000 of the 'web' container.
+    # This allows you to access the Flask app via http://localhost:5000 from your host.
+    ports:
+      - "5000:5000"
+    # Ensure the 'db' service starts and is healthy before the 'web' service is started.
+    depends_on:
+      - db
+    # Connect the 'web' service to the custom 'app-network'.
+    networks:
+      - app-network
+    # Always restart the container if it stops, unless explicitly stopped.
+    restart: always
+
+  # Service for the MongoDB database
+  db:
+    image: mongo:latest # Use the official MongoDB image from Docker Hub
+    # Mount a named volume to persist MongoDB data.
+    # This ensures your database data is not lost when the container is stopped or removed.
+    volumes:
+      - mongo_data:/data/db
+    # Connect the 'db' service to the custom 'app-network'.
+    # This allows the 'web' service to communicate with the 'db' service using the hostname 'db'.
+    networks:
+      - app-network
+    # Always restart the container if it stops, unless explicitly stopped.
+    restart: always
+
+# Define named volumes that services can use for data persistence.
+# 'mongo_data' will store MongoDB's database files.
+volumes:
+  mongo_data:
+
+# Define a custom bridge network for services to communicate with each other.
+# This provides better isolation and organization for your application's services.
+networks:
+  app-network:
+    driver: bridge # Use the default bridge driver for simple networking
