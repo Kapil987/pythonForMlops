@@ -67,3 +67,5 @@ docker push
 docker pull
 ```
 9) Practice cleanup commands
+
+
