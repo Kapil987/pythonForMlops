@@ -59,3 +59,23 @@ Imagine your IT team needs to calculate an updated Customer Lifetime Value (CLTV
 * **`subtract_three()`** could represent **deducting customer churn probability** or subscription cancellation rates.
 * **`square_number()`** might be a final **normalization or transformation step** to scale the CLTV score for a machine learning model or reporting.
 
+
+#### Airflow with NasaAPI
+1) Clone the repo on your local
+(HTTP Operator)[https://airflow.apache.org/docs/apache-airflow-providers-http/stable/operators.html]
+2) Generate API key https://api.nasa.gov/ , sign up and you will receive it via email
+3) 
+
+- Create a postgres db in aws, Aurora and RDS > Standard create > PostgreSQL > Free tier > Self managed > Auto generate password > Public access  -- Yes >
+
+
+- Download DBviewer and create a connect to connect to aws postres instance
+- get the astro cloud login token form `https://cloud.astronomer.io/token`
+- astro login -t `your token here`
+- 
+
+
+
+##### Knowledge
+1) When you define a DAG with a start_date in the past, Airflow's default behavior (catchup=True) is to schedule and execute a DAG run for every missed schedule.
+By setting catchup=False, you are telling the Airflow scheduler: "Don't worry about any past schedules that were missed. Just run for the most recent, completed schedule interval."
