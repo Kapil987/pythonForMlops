@@ -15,8 +15,7 @@ with DAG(
 
 ) as dag:
     
-    ## step 1: Create the table if it doesnt exists
-
+    ## Step 1: Create table in db if not present
     @task
     def create_table():
         ## initialize the Postgreshook
@@ -32,8 +31,6 @@ with DAG(
             date DATE,
             media_type VARCHAR(50)
         );
-
-
         """
         ## Execute the table creation query
         postgres_hook.run(create_table_query)
@@ -51,7 +48,6 @@ with DAG(
     )
 
     
-
     ## Step 3: Transform the data(Pick the information that i need to save)
     @task
     def transform_apod_data(response):
@@ -64,7 +60,6 @@ with DAG(
 
         }
         return apod_data
-
 
     ## step 4:  Load the data into Postgres SQL
     @task
@@ -91,14 +86,11 @@ with DAG(
 
         ))
 
-    ## step 5: Verify the data DBViewer
-
-
-    ## step 6: Define the task dependencies
+    ## Step 5: Define the task dependencies
     ## Extract
     create_table() >> extract_apod  ## Ensure the table is create befor extraction
     api_response=extract_apod.output
     ## Transform
     transformed_data=transform_apod_data(api_response)
     ## Load
-    load_data_to_postgres(transformed_data)
+    load_data_to_postgres(transformed_data) 

@@ -61,21 +61,46 @@ Imagine your IT team needs to calculate an updated Customer Lifetime Value (CLTV
 
 
 #### Airflow with NasaAPI
-1) Clone the repo on your local
+1) Clone the github repo on your local
 (HTTP Operator)[https://airflow.apache.org/docs/apache-airflow-providers-http/stable/operators.html]
 2) Generate API key https://api.nasa.gov/ , sign up and you will receive it via email
 3) 
 
-- Create a postgres db in aws, Aurora and RDS > Standard create > PostgreSQL > Free tier > Self managed > Auto generate password > Public access  -- Yes >
-
+- Create a postgres db in aws, Aurora and RDS > Standard create > PostgreSQL > Free tier > Self managed > Auto generate password > Public access  -- Yes > disable performance insights
 
 - Download DBviewer and create a connect to connect to aws postres instance
+https://dbeaver.io/files/dbeaver-ce-latest-win32.win32.x86_64.zip
+
+- Download/install astro cli based on your os
 - get the astro cloud login token form `https://cloud.astronomer.io/token`
-- astro login -t `your token here`
-- 
 
+- astro login -t `your token here` use this in the terminal
 
+- login on astronomer web UI and create a deployment in astronomer, under `Home` button you will get deployment options, click on `+Deployment` icon on the right side
+
+- give deployment name, provider as aws, 
+Execution
+Astro Runtime / Airflow Version
+`13.1.0 (based on Airflow v2.11.0)`
+Executor
+`Celery Executor`
+- click on create deployment and wait for 10 min to create the cluster
+- get familiar with the code written in 16-astro\dags\etl.py
+- Create connection on astro cloud as 
+`nasa_api`
+host: https://api.nasa.gov/
+Extra: 
+{
+  "api_key": "rRtAMsJ6LJjcXv4z5JKCs1Q7IeQ3tdXTb3bFrBw8"
+}
+
+`my_postgres_connection`
+host: 
+``
+https://api.nasa.gov/
 
 ##### Knowledge
 1) When you define a DAG with a start_date in the past, Airflow's default behavior (catchup=True) is to schedule and execute a DAG run for every missed schedule.
 By setting catchup=False, you are telling the Airflow scheduler: "Don't worry about any past schedules that were missed. Just run for the most recent, completed schedule interval."
+
+2) https://www.astronomer.io/docs/astro/runtime-image-architecture/#:~:text=Astro%20Runtime%20is%20a%20production,reliability%2C%20efficiency%2C%20and%20performance.
