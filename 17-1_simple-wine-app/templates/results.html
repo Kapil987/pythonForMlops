@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <!-- Link to the same stylesheet for a consistent look -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="result-container">
+        <h2>Prediction Result</h2>
+        <p class="result-text">The predicted quality for the wine is:</p>
+        <div class="prediction-value">
+            {{ prediction }}
+        </div>
+        <p class="result-disclaimer">
+            This is a machine learning prediction. Quality is rated on a scale, typically from 3 to 8.
+        </p>
+        <a href="/" class="back-button">Try Another Prediction</a>
+    </div>
+</body>
+</html>

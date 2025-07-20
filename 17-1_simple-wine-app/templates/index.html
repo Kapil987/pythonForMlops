@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Prediction</title>
+    <!-- Link to the new stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts for elegant typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <form class="form-detail" action="/predict" method="post">
+            <h2>Wine Quality Predictor</h2>
+            <p class="subtitle">Enter the chemical properties of the wine to predict its quality.</p>
+            
+            <div class="form-row-total">
+                <div class="form-row">
+                    <input type="text" name="fixed_acidity" id="fixed_acidity" class="input-text" placeholder="Fixed Acidity (e.g., 7.4)" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="volatile_acidity" id="volatile_acidity" class="input-text" placeholder="Volatile Acidity (e.g., 0.7)" required>
+                </div>
+            </div>
+
+            <div class="form-row-total">
+                <div class="form-row">
+                    <input type="text" name="citric_acid" id="citric_acid" class="input-text" placeholder="Citric Acid (e.g., 0.0)" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="residual_sugar" id="residual_sugar" class="input-text" placeholder="Residual Sugar (e.g., 1.9)" required>
+                </div>
+            </div>
+
+            <div class="form-row-total">
+                <div class="form-row">
+                    <input type="text" name="chlorides" id="chlorides" class="input-text" placeholder="Chlorides (e.g., 0.076)" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="free_sulfur_dioxide" id="free_sulfur_dioxide" class="input-text" placeholder="Free Sulfur Dioxide (e.g., 11.0)" required>
+                </div>
+            </div>
+
+            <div class="form-row-total">
+                <div class="form-row">
+                    <input type="text" name="total_sulfur_dioxide" id="total_sulfur_dioxide" class="input-text" placeholder="Total Sulfur Dioxide (e.g., 34.0)" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="density" id="density" class="input-text" placeholder="Density (e.g., 0.9978)" required>
+                </div>
+            </div>
+
+            <div class="form-row-total">
+                <div class="form-row">
+                    <input type="text" name="pH" id="pH" class="input-text" placeholder="pH (e.g., 3.51)" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="sulphates" id="sulphates" class="input-text" placeholder="Sulphates (e.g., 0.56)" required>
+                </div>
+            </div>
+
+            <div class="form-row-total">
+                 <div class="form-row-full">
+                    <input type="text" name="alcohol" id="alcohol" class="input-text" placeholder="Alcohol (e.g., 9.4)" required>
+                </div>
+            </div>
+
+            <div class="form-row-last">
+                <input type="submit" name="register" class="register" value="Predict Quality">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
