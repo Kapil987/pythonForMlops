@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  admin:
+    build:
+      context: ./Admin
+      dockerfile: Dockerfile
+    image: pdf-reader-admin
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+    volumes:
+      - ~/.aws:/root/.aws
+    ports:
+      - "8083:8083"
+    tty: true
+
+  client:
+    build:
+      context: ./User
+      dockerfile: Dockerfile
+    image: pdf-reader-client
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+    volumes:
+      - ~/.aws:/root/.aws
+    ports:
+      - "8084:8084"
+    tty: true

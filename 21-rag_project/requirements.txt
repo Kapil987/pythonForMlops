@@ -1,0 +1,8 @@
+boto3
+streamlit
+langchain
+langchain-community
+faiss-cpu
+sentence-transformers
+PyPDF2
+s3fs
