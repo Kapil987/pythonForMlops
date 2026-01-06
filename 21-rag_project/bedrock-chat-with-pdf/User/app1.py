@@ -16,7 +16,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
 # PDF Loader and Text Splitter (if needed in your workflow)
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 
 # Import FAISS for vectorstore management

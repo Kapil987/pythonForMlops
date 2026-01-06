@@ -3,3 +3,6 @@ langchain
 faiss-cpu
 boto3
 langchain_community
+langchain-aws
+langchain-text-splitters
+pypdf

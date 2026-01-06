@@ -1,107 +1,121 @@
 import boto3
 import streamlit as st
 import os
-import uuid
+# from operator import itemgetter
 
-## s3_client
-s3_client = boto3.client("s3")
-BUCKET_NAME = os.getenv("BUCKET_NAME")
-
-## Bedrock
-from langchain_community.embeddings import BedrockEmbeddings
-from langchain.llms.bedrock import Bedrock
-
-## prompt and chain
-from langchain.prompts import PromptTemplate
-from langchain.chains import RetrievalQA
-
-## Text Splitter
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-
-## Pdf Loader
-from langchain_community.document_loaders import PyPDFLoader
-
-## import FAISS
+from langchain_aws import BedrockEmbeddings
+# ChatBedrock for Titan Premier/Nova
+from langchain_aws import ChatBedrock 
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import FAISS
 
-bedrock_client = boto3.client(service_name="bedrock-runtime")
-bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0", client=bedrock_client)
+## AWS Setup
+REGION = "us-east-1"
+s3_client = boto3.client("s3", region_name=REGION)
+bedrock_client = boto3.client(service_name="bedrock-runtime", region_name=REGION)
 
-folder_path="/tmp/"
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+folder_path = "/tmp"
 
-def get_unique_id():
-    return str(uuid.uuid4())
+## Initialize Embeddings (Keep Titan Embed for vector search)
+bedrock_embeddings = BedrockEmbeddings(
+    model_id="amazon.titan-embed-text-v2:0", 
+    client=bedrock_client
+)
 
-## load index
 def load_index():
-    s3_client.download_file(Bucket=BUCKET_NAME, Key="my_faiss.faiss", Filename=f"{folder_path}my_faiss.faiss")
-    s3_client.download_file(Bucket=BUCKET_NAME, Key="my_faiss.pkl", Filename=f"{folder_path}my_faiss.pkl")
+    s3_client.download_file(Bucket=BUCKET_NAME, Key="my_faiss.faiss", Filename=f"{folder_path}/my_faiss.faiss")
+    s3_client.download_file(Bucket=BUCKET_NAME, Key="my_faiss.pkl", Filename=f"{folder_path}/my_faiss.pkl")
 
 def get_llm():
-    llm=Bedrock(model_id="amazon.titan-text-premier-v1:0", client=bedrock_client,
-                model_kwargs={'maxTokenCount': 512})
-    return llm
+    # CHANGE: Switched to ChatBedrock
+    return ChatBedrock(
+        model_id="us.amazon.nova-micro-v1:0", 
+        client=bedrock_client,
+        model_kwargs={'max_tokens': 512}
+    )
 
-# get_response()
-def get_response(llm,vectorstore, question ):
-    ## create prompt / template
-    prompt_template = """
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
-    Human: Please use the given context to provide concise answer to the question
-    If you don't know the answer, just say that you don't know, don't try to make up an answer.
+def get_response(llm, vectorstore, question):
+    ## Normal prompt
+    # template = """
+    # Use the following pieces of context to provide a concise answer to the question at the end.
+    # <context>
+    # {context}
+    # </context>
+    # Question: {question}
+    # """
+
+    ## Chain of Thought" prompt that encourages the model to look harder
+    template = """
+    Human: You are a helpful banking assistant.
+    Use the context below to answer the user's question. 
+    Look for keywords like "Exclusions", "Ineligible", "0%", or "Not applicable".
+    If the answer is not in the context, tell the user you couldn't find it in the current document, but offer to look for related topics.
+
     <context>
     {context}
     </context>
 
     Question: {question}
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 5})
+    # retriever = vectorstore.as_retriever(
+    #     search_type="mmr", 
+    #     search_kwargs={"k": 10, "fetch_k": 20}
+    # )
 
-    Assistant:"""
-
-    PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
+    # The Clean LCEL Chain
+    rag_chain = (
+        {
+            "context": retriever | format_docs, 
+            "question": RunnablePassthrough()
+        }
+        | prompt
+        | llm
+        | StrOutputParser()
     )
 
-    qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=vectorstore.as_retriever(
-        search_type="similarity", search_kwargs={"k": 5}
-    ),
-    return_source_documents=True,
-    chain_type_kwargs={"prompt": PROMPT}
-)
-    answer=qa({"query":question})
-    return answer['result']
+    return rag_chain.invoke(question)
 
-
-## main method
 def main():
-    st.header("This is Client Site for Chat with PDF demo using Bedrock, RAG etc")
+    st.set_page_config("Client - Chat with PDF")
+    st.header("Chat with your PDF (Bedrock + RAG)")
 
-    load_index()
+    if st.button("Download/Sync Index from S3"):
+        try:
+            with st.spinner("Fetching latest index..."):
+                load_index()
+                st.success("Index synced!")
+        except Exception as e:
+            st.error(f"Failed to find index in S3. Error: {e}")
 
-    dir_list = os.listdir(folder_path)
-    st.write(f"Files and Directories in {folder_path}")
-    st.write(dir_list)
+    if os.path.exists(f"{folder_path}/my_faiss.faiss"):
+        faiss_index = FAISS.load_local(
+            index_name="my_faiss",
+            folder_path=folder_path,
+            embeddings=bedrock_embeddings,
+            allow_dangerous_deserialization=True
+        )
+        st.info("Knowledge Base is Ready.")
 
-    ## create index
-    faiss_index = FAISS.load_local(
-        index_name="my_faiss",
-        folder_path = folder_path,
-        embeddings=bedrock_embeddings,
-        allow_dangerous_deserialization=True
-    )
-
-    st.write("INDEX IS READY")
-    question = st.text_input("Please ask your question")
-    if st.button("Ask Question"):
-        with st.spinner("Querying..."):
-
-            llm = get_llm()
-
-            # get_response
-            st.write(get_response(llm, faiss_index, question))
-            st.success("Done")
+        question = st.text_input("Ask a question about your document:")
+        if st.button("Ask Bedrock"):
+            if question:
+                with st.spinner("Thinking..."):
+                    llm = get_llm()
+                    answer = get_response(llm, faiss_index, question)
+                    st.markdown("### Answer:")
+                    st.write(answer)
+            else:
+                st.warning("Please enter a question first.")
+    else:
+        st.warning("No index found locally. Please click 'Download/Sync Index' above.")
 
 if __name__ == "__main__":
     main()
